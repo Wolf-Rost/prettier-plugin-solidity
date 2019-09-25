@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const stringWidth = require('string-width');
-const emojiRegex = require('emoji-regex')();
-const escapeStringRegexp = require('escape-string-regexp');
+const stringWidth = require("string-width");
+const emojiRegex = require("emoji-regex")();
+const escapeStringRegexp = require("escape-string-regexp");
 
 // eslint-disable-next-line no-control-regex
 const notAsciiRegex = /[^\x20-\x7F]/;
@@ -10,11 +10,11 @@ const notAsciiRegex = /[^\x20-\x7F]/;
 function isExportDeclaration(node) {
   if (node) {
     switch (node.type) {
-      case 'ExportDefaultDeclaration':
-      case 'ExportDefaultSpecifier':
-      case 'DeclareExportDeclaration':
-      case 'ExportNamedDeclaration':
-      case 'ExportAllDeclaration':
+      case "ExportDefaultDeclaration":
+      case "ExportDefaultSpecifier":
+      case "DeclareExportDeclaration":
+      case "ExportNamedDeclaration":
+      case "ExportAllDeclaration":
         return true;
     }
   }
@@ -24,7 +24,7 @@ function isExportDeclaration(node) {
 
 function getParentExportDeclaration(path) {
   const parentNode = path.getParentNode();
-  if (path.getName() === 'declaration' && isExportDeclaration(parentNode)) {
+  if (path.getName() === "declaration" && isExportDeclaration(parentNode)) {
     return parentNode;
   }
 
@@ -82,8 +82,8 @@ function skip(chars) {
 }
 
 const skipWhitespace = skip(/\s/);
-const skipSpaces = skip(' \t');
-const skipToLineEnd = skip(',; \t');
+const skipSpaces = skip(" \t");
+const skipToLineEnd = skip(",; \t");
 const skipEverythingButNewLine = skip(/[^\r\n]/);
 
 function skipInlineComment(text, index) {
@@ -91,9 +91,9 @@ function skipInlineComment(text, index) {
     return false;
   }
 
-  if (text.charAt(index) === '/' && text.charAt(index + 1) === '*') {
+  if (text.charAt(index) === "/" && text.charAt(index + 1) === "*") {
     for (let i = index + 2; i < text.length; ++i) {
-      if (text.charAt(i) === '*' && text.charAt(i + 1) === '/') {
+      if (text.charAt(i) === "*" && text.charAt(i + 1) === "/") {
         return i + 2;
       }
     }
@@ -106,7 +106,7 @@ function skipTrailingComment(text, index) {
     return false;
   }
 
-  if (text.charAt(index) === '/' && text.charAt(index + 1) === '/') {
+  if (text.charAt(index) === "/" && text.charAt(index + 1) === "/") {
     return skipEverythingButNewLine(text, index);
   }
   return index;
@@ -123,26 +123,26 @@ function skipNewline(text, index, opts) {
 
   const atIndex = text.charAt(index);
   if (backwards) {
-    if (text.charAt(index - 1) === '\r' && atIndex === '\n') {
+    if (text.charAt(index - 1) === "\r" && atIndex === "\n") {
       return index - 2;
     }
     if (
-      atIndex === '\n' ||
-      atIndex === '\r' ||
-      atIndex === '\u2028' ||
-      atIndex === '\u2029'
+      atIndex === "\n" ||
+      atIndex === "\r" ||
+      atIndex === "\u2028" ||
+      atIndex === "\u2029"
     ) {
       return index - 1;
     }
   } else {
-    if (atIndex === '\r' && text.charAt(index + 1) === '\n') {
+    if (atIndex === "\r" && text.charAt(index + 1) === "\n") {
       return index + 2;
     }
     if (
-      atIndex === '\n' ||
-      atIndex === '\r' ||
-      atIndex === '\u2028' ||
-      atIndex === '\u2029'
+      atIndex === "\n" ||
+      atIndex === "\r" ||
+      atIndex === "\u2028" ||
+      atIndex === "\u2029"
     ) {
       return index + 1;
     }
@@ -160,7 +160,7 @@ function hasNewline(text, index, opts) {
 
 function hasNewlineInRange(text, start, end) {
   for (let i = start; i < end; ++i) {
-    if (text.charAt(i) === '\n') {
+    if (text.charAt(i) === "\n") {
       return true;
     }
   }
@@ -239,18 +239,18 @@ function setLocEnd(node, index) {
 
 const PRECEDENCE = {};
 [
-  ['|>'],
-  ['||', '??'],
-  ['&&'],
-  ['|'],
-  ['^'],
-  ['&'],
-  ['==', '===', '!=', '!=='],
-  ['<', '>', '<=', '>=', 'in', 'instanceof'],
-  ['>>', '<<', '>>>'],
-  ['+', '-'],
-  ['*', '/', '%'],
-  ['**']
+  ["|>"],
+  ["||", "??"],
+  ["&&"],
+  ["|"],
+  ["^"],
+  ["&"],
+  ["==", "===", "!=", "!=="],
+  ["<", ">", "<=", ">=", "in", "instanceof"],
+  [">>", "<<", ">>>"],
+  ["+", "-"],
+  ["*", "/", "%"],
+  ["**"]
 ].forEach((tier, i) => {
   tier.forEach(op => {
     PRECEDENCE[op] = i;
@@ -262,20 +262,20 @@ function getPrecedence(op) {
 }
 
 const equalityOperators = {
-  '==': true,
-  '!=': true,
-  '===': true,
-  '!==': true
+  "==": true,
+  "!=": true,
+  "===": true,
+  "!==": true
 };
 const multiplicativeOperators = {
-  '*': true,
-  '/': true,
-  '%': true
+  "*": true,
+  "/": true,
+  "%": true
 };
 const bitshiftOperators = {
-  '>>': true,
-  '>>>': true,
-  '<<': true
+  ">>": true,
+  ">>>": true,
+  "<<": true
 };
 
 function shouldFlatten(parentOp, nodeOp) {
@@ -285,7 +285,7 @@ function shouldFlatten(parentOp, nodeOp) {
 
   // ** is right-associative
   // x ** y ** z --> x ** (y ** z)
-  if (parentOp === '**') {
+  if (parentOp === "**") {
     return false;
   }
 
@@ -296,8 +296,8 @@ function shouldFlatten(parentOp, nodeOp) {
 
   // x * y % z --> (x * y) % z
   if (
-    (nodeOp === '%' && multiplicativeOperators[parentOp]) ||
-    (parentOp === '%' && multiplicativeOperators[nodeOp])
+    (nodeOp === "%" && multiplicativeOperators[parentOp]) ||
+    (parentOp === "%" && multiplicativeOperators[nodeOp])
   ) {
     return false;
   }
@@ -323,9 +323,9 @@ function shouldFlatten(parentOp, nodeOp) {
 function isBitwiseOperator(operator) {
   return (
     !!bitshiftOperators[operator] ||
-    operator === '|' ||
-    operator === '^' ||
-    operator === '&'
+    operator === "|" ||
+    operator === "^" ||
+    operator === "&"
   );
 }
 
@@ -335,25 +335,25 @@ function isBitwiseOperator(operator) {
 function startsWithNoLookaheadToken(node, forbidFunctionClassAndDoExpr) {
   node = getLeftMost(node);
   switch (node.type) {
-    case 'FunctionExpression':
-    case 'ClassExpression':
-    case 'DoExpression':
+    case "FunctionExpression":
+    case "ClassExpression":
+    case "DoExpression":
       return forbidFunctionClassAndDoExpr;
-    case 'ObjectExpression':
+    case "ObjectExpression":
       return true;
-    case 'MemberExpression':
+    case "MemberExpression":
       return startsWithNoLookaheadToken(
         node.object,
         forbidFunctionClassAndDoExpr
       );
-    case 'TaggedTemplateExpression':
-      if (node.tag.type === 'FunctionExpression') {
+    case "TaggedTemplateExpression":
+      if (node.tag.type === "FunctionExpression") {
         // IIFEs are always already parenthesized
         return false;
       }
       return startsWithNoLookaheadToken(node.tag, forbidFunctionClassAndDoExpr);
-    case 'CallExpression':
-      if (node.callee.type === 'FunctionExpression') {
+    case "CallExpression":
+      if (node.callee.type === "FunctionExpression") {
         // IIFEs are always already parenthesized
         return false;
       }
@@ -361,27 +361,27 @@ function startsWithNoLookaheadToken(node, forbidFunctionClassAndDoExpr) {
         node.callee,
         forbidFunctionClassAndDoExpr
       );
-    case 'ConditionalExpression':
+    case "ConditionalExpression":
       return startsWithNoLookaheadToken(
         node.test,
         forbidFunctionClassAndDoExpr
       );
-    case 'UpdateExpression':
+    case "UpdateExpression":
       return (
         !node.prefix &&
         startsWithNoLookaheadToken(node.argument, forbidFunctionClassAndDoExpr)
       );
-    case 'BindExpression':
+    case "BindExpression":
       return (
         node.object &&
         startsWithNoLookaheadToken(node.object, forbidFunctionClassAndDoExpr)
       );
-    case 'SequenceExpression':
+    case "SequenceExpression":
       return startsWithNoLookaheadToken(
         node.expressions[0],
         forbidFunctionClassAndDoExpr
       );
-    case 'TSAsExpression':
+    case "TSAsExpression":
       return startsWithNoLookaheadToken(
         node.expression,
         forbidFunctionClassAndDoExpr
@@ -403,7 +403,7 @@ function getAlignmentSize(value, tabWidth, startIndex) {
 
   let size = 0;
   for (let i = startIndex; i < value.length; ++i) {
-    if (value[i] === '\t') {
+    if (value[i] === "\t") {
       // Tabs behave in a way that they are aligned to the nearest
       // multiple of tabWidth:
       // 0 -> 4, 1 -> 4, 2 -> 4, 3 -> 4
@@ -418,7 +418,7 @@ function getAlignmentSize(value, tabWidth, startIndex) {
 }
 
 function getIndentSize(value, tabWidth) {
-  const lastNewlineIndex = value.lastIndexOf('\n');
+  const lastNewlineIndex = value.lastIndexOf("\n");
   if (lastNewlineIndex === -1) {
     return 0;
   }
@@ -430,11 +430,7 @@ function getIndentSize(value, tabWidth) {
   );
 }
 
-function printString(raw, options, isDirectiveLiteral) {
-  // `rawContent` is the string exactly like it appeared in the input source
-  // code, without its enclosing quotes.
-  const rawContent = raw.slice(1, -1);
-
+function printString(rawContent, options) {
   const double = { quote: '"', regex: /"/g };
   const single = { quote: "'", regex: /'/g };
 
@@ -503,7 +499,7 @@ function makeString(rawContent, enclosingQuote, unescapeUnnecessaryEscapes) {
     // intend to enclose the string with, it must be escaped, so return it with
     // a backslash.
     if (quote === enclosingQuote) {
-      return '\\' + quote;
+      return "\\" + quote;
     }
 
     if (quote) {
@@ -515,7 +511,7 @@ function makeString(rawContent, enclosingQuote, unescapeUnnecessaryEscapes) {
     return unescapeUnnecessaryEscapes &&
       /^[^\\nrvtbfux\r\n\u2028\u2029"'0-7]$/.test(escaped)
       ? escaped
-      : '\\' + escaped;
+      : "\\" + escaped;
   });
 
   return enclosingQuote + newContent + enclosingQuote;
@@ -526,21 +522,21 @@ function printNumber(rawNumber) {
     rawNumber
       .toLowerCase()
       // Remove unnecessary plus and zeroes from scientific notation.
-      .replace(/^([+-]?[\d.]+e)(?:\+|(-))?0*(\d)/, '$1$2$3')
+      .replace(/^([+-]?[\d.]+e)(?:\+|(-))?0*(\d)/, "$1$2$3")
       // Remove unnecessary scientific notation (1e0).
-      .replace(/^([+-]?[\d.]+)e[+-]?0+$/, '$1')
+      .replace(/^([+-]?[\d.]+)e[+-]?0+$/, "$1")
       // Make sure numbers always start with a digit.
-      .replace(/^([+-])?\./, '$10.')
+      .replace(/^([+-])?\./, "$10.")
       // Remove extraneous trailing decimal zeroes.
-      .replace(/(\.\d+?)0+(?=e|$)/, '$1')
+      .replace(/(\.\d+?)0+(?=e|$)/, "$1")
       // Remove trailing dot.
-      .replace(/\.(?=e|$)/, '')
+      .replace(/\.(?=e|$)/, "")
   );
 }
 
 function getMaxContinuousCount(str, target) {
   const results = str.match(
-    new RegExp(`(${escapeStringRegexp(target)})+`, 'g')
+    new RegExp(`(${escapeStringRegexp(target)})+`, "g")
   );
 
   if (results === null) {
@@ -566,7 +562,7 @@ function getStringWidth(text) {
   // emojis are considered 2-char width for consistency
   // see https://github.com/sindresorhus/string-width/issues/11
   // for the reason why not implemented in `string-width`
-  return stringWidth(text.replace(emojiRegex, '  '));
+  return stringWidth(text.replace(emojiRegex, "  "));
 }
 
 function hasIgnoreComment(path) {
@@ -579,7 +575,7 @@ function hasNodeIgnoreComment(node) {
     node &&
     node.comments &&
     node.comments.length > 0 &&
-    node.comments.some(comment => comment.value.trim() === 'prettier-ignore')
+    node.comments.some(comment => comment.value.trim() === "prettier-ignore")
   );
 }
 
@@ -605,7 +601,7 @@ function addCommentHelper(node, comment) {
   // For some reason, TypeScript parses `// x` inside of JSXText as a comment
   // We already "print" it via the raw text, we don't need to re-print it as a
   // comment
-  if (node.type === 'JSXText') {
+  if (node.type === "JSXText") {
     comment.printed = true;
   }
 }
