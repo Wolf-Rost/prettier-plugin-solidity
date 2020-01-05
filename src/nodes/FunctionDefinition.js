@@ -12,17 +12,13 @@ const functionName = node => {
 
 const parameters = (parametersType, node, path, print) => {
   if (node[parametersType] && node[parametersType].length > 0) {
-    return group(
-      concat([
+    return concat([
         indent(
           concat([
-            softline,
             join(concat([',', line]), path.map(print, parametersType))
           ])
-        ),
-        softline
-      ])
-    );
+        )
+      ]);
   }
   return '';
 };
@@ -78,15 +74,13 @@ const FunctionDefinition = {
       parameters('parameters', node, path, print),
       ')',
       indent(
-        group(
-          concat([
-            visibility(node),
-            stateMutability(node),
-            modifiers(node, path, print),
-            returnParameters(node, path, print),
-            signatureEnd(node)
-          ])
-        )
+        concat([
+          visibility(node),
+          stateMutability(node),
+          modifiers(node, path, print),
+          returnParameters(node, path, print),
+          signatureEnd(node)
+        ])
       ),
       body(node, path, print)
     ])

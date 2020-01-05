@@ -1,5 +1,5 @@
 {
-  "name": "prettier-plugin-solidity",
+  "name": "@calystral/prettier-plugin-solidity",
   "version": "1.0.0-alpha.35",
   "description": "prettier plugin for solidity",
   "main": "src",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/prettier-solidity/prettier-plugin-solidity.git"
+    "url": "git+https://github.com/Wolf-Rost/prettier-plugin-solidity.git"
   },
   "keywords": [
     "ethereum",
@@ -54,9 +54,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/prettier-solidity/prettier-plugin-solidity/issues"
+    "url": "https://github.com/Wolf-Rost/prettier-plugin-solidity/issues"
   },
-  "homepage": "https://github.com/prettier-solidity/prettier-plugin-solidity#readme",
+  "homepage": "https://github.com/Wolf-Rost/prettier-plugin-solidity#readme",
   "engines": {
     "node": ">=8"
   },
