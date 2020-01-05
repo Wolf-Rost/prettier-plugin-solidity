@@ -23,18 +23,18 @@ const functionName = (node, options) => {
   return names[name];
 };
 
-const parameters = (parametersType, node, path, print) =>
-  node[parametersType] && node[parametersType].length > 0
-    ? printSeparatedList(path.map(print, parametersType), {
-        separator: concat([
-          ',',
-          // To keep consistency any list of parameters will split if it's longer than 2.
-          // For more information see:
-          // https://github.com/prettier-solidity/prettier-plugin-solidity/issues/256
-          node[parametersType].length > 2 ? hardline : line
-        ])
-      })
-    : '';
+const parameters = (parametersType, node, path, print) => {
+  if (node[parametersType] && node[parametersType].length > 0) {
+    return concat([
+        indent(
+          concat([
+            join(concat([',', line]), path.map(print, parametersType))
+          ])
+        )
+      ]);
+  }
+  return '';
+};
 
 const visibility = (node) =>
   node.visibility && node.visibility !== 'default'
@@ -75,16 +75,13 @@ const FunctionDefinition = {
       parameters('parameters', node, path, print),
       ')',
       indent(
-        group(
-          concat([
-            visibility(node),
-            virtual(node),
-            stateMutability(node),
-            modifiers(node, path, print),
-            returnParameters(node, path, print),
-            signatureEnd(node)
-          ])
-        )
+        concat([
+          visibility(node),
+          stateMutability(node),
+          modifiers(node, path, print),
+          returnParameters(node, path, print),
+          signatureEnd(node)
+        ])
       ),
       body(node, path, print)
     ])
