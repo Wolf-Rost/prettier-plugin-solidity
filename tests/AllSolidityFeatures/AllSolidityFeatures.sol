@@ -259,6 +259,7 @@ library UsingExampleLibrary {
 }
 
 contract UsingExampleContract {
+  using UsingExampleLibrary for *;
   using UsingExampleLibrary for uint[];
 }
 
@@ -409,5 +410,21 @@ contract multilineReturn {
   function a() returns (uint x) {
     return
       5;
+  }
+}
+
+contract continueStatement {
+  function a() {
+    while (true) { continue; }
+  }
+}
+
+abstract  contract  AbstractContract {
+
+}
+
+contract  ContractWithVirtual
+{
+  function   foo() public virtual  returns  ( uint ) {
   }
 }

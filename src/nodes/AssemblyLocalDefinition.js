@@ -1,15 +1,17 @@
 const {
   doc: {
-    builders: { join }
+    builders: { concat, line }
   }
 } = require('prettier/standalone');
 
+const printSeparatedList = require('./print-separated-list');
+
 const AssemblyLocalDefinition = {
   print: ({ path, print }) =>
-    join(' ', [
+    concat([
       'let',
-      join(', ', path.map(print, 'names')),
-      ':=',
+      printSeparatedList(path.map(print, 'names'), { firstSeparator: line }),
+      ':= ',
       path.call(print, 'expression')
     ])
 };

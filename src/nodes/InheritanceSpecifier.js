@@ -4,18 +4,16 @@ const {
   }
 } = require('prettier/standalone');
 
+const printSeparatedList = require('./print-separated-list');
+
+const printArguments = (node, path, print) =>
+  node.arguments && node.arguments.length
+    ? concat(['(', printSeparatedList(path.map(print, 'arguments')), ')'])
+    : '';
+
 const InheritanceSpecifier = {
-  print: ({ node, path, print }) => {
-    let parts = [path.call(print, 'baseName')];
-
-    if (node.arguments && node.arguments.length) {
-      parts.push('(');
-      parts = parts.concat(path.map(print, 'arguments'));
-      parts.push(')');
-    }
-
-    return concat(parts);
-  }
+  print: ({ node, path, print }) =>
+    concat([path.call(print, 'baseName'), printArguments(node, path, print)])
 };
 
 module.exports = InheritanceSpecifier;
